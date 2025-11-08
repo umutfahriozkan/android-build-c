@@ -1,0 +1,31 @@
+name: Update
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: 0 0 1 * *
+
+permissions: 
+  contents: write
+
+jobs:
+ update:
+  runs-on: ubuntu-latest
+  steps:
+    - uses: actions/checkout@v5
+    - run: |
+        set -x
+        #for platform in $ANDROID_SDK_ROOT/platforms/*; do
+        #  mkdir -p ./android/$(basename $platform)
+        #  cp  $platform/android.jar ./android/$(basename $platform)/
+        #done
+
+        cp -r "$ANDROID_SDK_ROOT/build-tools/$(ls -1 "$ANDROID_SDK_ROOT/build-tools" | sort -V | tail -n 1)"/{aapt2*,apksigner*,zipalign*,lib} .
+        cp  $ANDROID_SDK_ROOT/ndk/$(ls -1 "$ANDROID_SDK_ROOT/ndk" | sort -V | tail -n 1)/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include .
+        cp  $ANDROID_SDK_ROOT/ndk/$(ls -1 "$ANDROID_SDK_ROOT/ndk" | sort -V | tail -n 1)/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib .
+        cp  $ANDROID_SDK_ROOT/ndk/$(ls -1 "$ANDROID_SDK_ROOT/ndk" | sort -V | tail -n 1)/sources/android/native_app_glue/android_* .
+        rm -rf lib/d8.jar
+        git add -A
+        git config --global user.name  'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        git commit -m "$(ls -1 "$ANDROID_SDK_ROOT/ndk" | sort -V | tail -n 1) $(ls -1 "$ANDROID_SDK_ROOT/build-tools" | sort -V | tail -n 1)"
+        git push
