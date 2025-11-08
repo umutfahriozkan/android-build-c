@@ -20,8 +20,8 @@ jobs:
         #done
 
         cp -r "$ANDROID_SDK_ROOT/build-tools/$(ls -1 "$ANDROID_SDK_ROOT/build-tools" | sort -V | tail -n 1)"/{aapt2*,apksigner*,zipalign*,lib} .
-        cp  $ANDROID_SDK_ROOT/ndk/$(ls -1 "$ANDROID_SDK_ROOT/ndk" | sort -V | tail -n 1)/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include .
-        cp  $ANDROID_SDK_ROOT/ndk/$(ls -1 "$ANDROID_SDK_ROOT/ndk" | sort -V | tail -n 1)/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib .
+        cp  -r $ANDROID_SDK_ROOT/ndk/$(ls -1 "$ANDROID_SDK_ROOT/ndk" | sort -V | tail -n 1)/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include .
+        cp  -r $ANDROID_SDK_ROOT/ndk/$(ls -1 "$ANDROID_SDK_ROOT/ndk" | sort -V | tail -n 1)/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib .
         cp  $ANDROID_SDK_ROOT/ndk/$(ls -1 "$ANDROID_SDK_ROOT/ndk" | sort -V | tail -n 1)/sources/android/native_app_glue/android_* .
         rm -rf lib/d8.jar
         git add -A
